@@ -190,6 +190,13 @@ hear /fortune/, (message) ->
   get url, (body) ->
     message.say body
 
+desc 'chuck'
+hear /chuck/, (message) ->
+  url = "http://api.icndb.com/jokes/random"
+
+  get url, (body) ->
+    message.say body['value']['joke']
+
 desc 'weather in PLACE'
 hear /weather in (.+)/i, (message) ->
   place = message.match[1]
