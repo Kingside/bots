@@ -1,6 +1,6 @@
 {EventEmitter} = require 'events'
-xmpp = require 'node-xmpp'
-{puts} = require 'util'
+{puts}         = require 'util'
+xmpp           = require 'node-xmpp'
 
 class XMPP extends EventEmitter
   constructor: (jid, password) ->
@@ -8,6 +8,7 @@ class XMPP extends EventEmitter
     @client = new xmpp.Client
       jid: jid
       password: password
+
     @client.on 'online', @updatePresence
     @client.on 'stanza', @processStanza
     @client.on 'error', (err) -> console.warn(err)
@@ -22,8 +23,5 @@ class XMPP extends EventEmitter
       stanza.body = stanza.children[0].children[0]
       stanza.client = @client
       @emit 'message', stanza
-      # stanza.attrs.to = stanza.attrs.from
-      # delete stanza.attrs.from
-      # @client.send stanza if body
 
 exports.createClient = (u, p) -> new XMPP(u, p)
