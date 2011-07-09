@@ -13,8 +13,7 @@
   "dependencies": {
     "coffee-script": "1.1",
     "node-xmpp": "",
-    "ranger": "",
-    "node-stringprep": ""
+    "ranger": ""
   },
   "devDependencies": {}
 }
