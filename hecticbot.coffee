@@ -186,6 +186,10 @@ hear /commit/, (message) ->
   get url, (body) ->
     message.say body
 
+desc 'hecticjeff'
+hear /hecticjeff/i, (message) ->
+  message.say "He da man"
+
 desc 'fortune'
 hear /fortune/, (message) ->
   url = "http://www.fortunefortoday.com/getfortuneonly.php"
