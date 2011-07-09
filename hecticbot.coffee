@@ -105,6 +105,11 @@ campfire.room roomId, (room) ->
       console.log "\nI'll be back"
       process.exit()
 
+http.createServer (req, res) ->
+  res.writeHead 200, 'Content-Type': 'text/plain'
+  res.end "Bow down to hecticbot"
+.listen process.env.PORT || 3000
+
 # Hecticbot's actions
 
 get = (path, body, callback) ->
