@@ -191,7 +191,7 @@ hear /fortune/, (message) ->
     message.say body
 
 desc 'chuck'
-hear /chuck/, (message) ->
+hear /chuck/i, (message) ->
   url = "http://api.icndb.com/jokes/random"
 
   get url, (body) ->
