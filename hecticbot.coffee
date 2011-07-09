@@ -7,8 +7,8 @@ ranger = require 'ranger'
 
 ua = "Hecticbot 0.0.1"
 
-roomId = process.env.CAMPFIRE_ROOM
-userId = process.env.CAMPFIRE_USER
+roomId = parseInt process.env.CAMPFIRE_ROOM
+userId = parseInt process.env.CAMPFIRE_USER
 account = process.env.CAMPFIRE_ACCOUNT
 apiKey = process.env.CAMPFIRE_API_KEY
 jid = process.env.HECTICBOT_JID
