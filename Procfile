@@ -1,1 +1,1 @@
-web: coffee hecticjeff.coffee
+web: coffee hecticbot.coffee
