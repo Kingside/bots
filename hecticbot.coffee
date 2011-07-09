@@ -245,4 +245,4 @@ hear /(the rules|the laws)/i, (message) ->
       message.say "3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Law."
 
 hear /(respond|answer me|bij)/i, (message) ->
-  message.say "EXPERIENCE BIJ."
+  message.say "Chill, Winston."
