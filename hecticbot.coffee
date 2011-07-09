@@ -141,7 +141,7 @@ hear /ping/, (message) ->
 
 hear /reload/, (message) ->
   message.say "Reloading…", ->
-    exec "git fetch origin && git reset --hard origin/master", ->
+    exec "cd #{__dirname} && git fetch origin && git reset --hard origin/master", ->
       process.exit(1)
 
 hear /help/, (message) ->
