@@ -1,0 +1,20 @@
+{
+  "author": "Chris Mytton <self@hecticjeff.net> (http://hecticjeff.net)",
+  "name": "hecticbot",
+  "description": "A little XMPP bot that's not very hectic.",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hecticjeff/hecticbot.git"
+  },
+  "engines": {
+    "node": "0.4"
+  },
+  "dependencies": {
+    "coffee-script": "1.1",
+    "node-xmpp": "",
+    "ranger": "",
+    "node-stringprep": ""
+  },
+  "devDependencies": {}
+}
