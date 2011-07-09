@@ -2,6 +2,7 @@
 #
 # A little bot to keep you company on those dark lonely winter nights.
 http = require 'http'
+{exec} = require 'child_process'
 ranger = require 'ranger'
 
 ua = "Hecticbot 0.0.1"
