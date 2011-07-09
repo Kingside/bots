@@ -206,7 +206,7 @@ hear /weather in (.+)/i, (message) ->
     try
       if match = body.match(/<current_conditions>(.+?)<\/current_conditions>/)
         icon = match[1].match(/<icon data="(.+?)"/)
-        degrees = match[1].match(/<temp_f data="(.+?)"/)
+        degrees = match[1].match(/<temp_c data="(.+?)"/)
         message.say "#{degrees[1]}° — http://www.google.com#{icon[1]}"
     catch e
       console.log "Weather error: " + e
