@@ -1,22 +1,18 @@
-# Hecticbot, the little bot that could.
-#
-# A little bot to keep you company on those dark lonely winter nights.
+# The `Hecticbot` class, this is the main external API for the bot.
+# It provides and abstraction on top of various interfaces to perform various
+# 'bot actions.
 http = require 'http'
 {exec} = require 'child_process'
-ranger = require 'ranger'
 
+# Configuration
 ua = "Hecticbot 0.0.1"
 
-roomId = parseInt process.env.CAMPFIRE_ROOM
-userId = parseInt process.env.CAMPFIRE_USER
-account = process.env.CAMPFIRE_ACCOUNT
-apiKey = process.env.CAMPFIRE_API_KEY
 jid = process.env.HECTICBOT_JID
 jidPassword = process.env.HECTICBOT_PASSWORD
 
-# Hecticbot's brain
-campfire = ranger.createClient(account, apiKey)
+# Interfaces
 chat = require './xmpp'
+campfire = require './campfire'
 
 client = chat.createClient jid, jidPassword
 
@@ -25,109 +21,12 @@ client.on 'message', (stanza) ->
   delete stanza.attrs.from
   xmppDispatch(stanza) if stanza.body
 
-request = (method, path, body, callback) ->
-  if match = path.match(/^(https?):\/\/([^\/]+?)(\/.+)/)
-    headers = { Host: match[2], 'Content-Type': 'application/json', 'User-Agent': ua }
-    port = if match[1] == 'https' then 443 else 80
-    client = http.createClient(port, match[2], port == 443)
-    path = match[3]
-
-    if typeof(body) is 'function' and not callback
-      callback = body
-      body = null
-
-    if method is 'POST' and body
-      body = JSON.stringify body if typeof body isnt 'string'
-      headers['Content-Length'] = body.length
-
-    req = client.request(method, path, headers)
-
-    req.on 'response', (response) ->
-      if response.statusCode is 200
-        data = ''
-        response.setEncoding('utf8')
-        response.on 'data', (chunk) ->
-          data += chunk
-        response.on 'end', ->
-          if callback
-            try
-              body = JSON.parse(data)
-            catch e
-              body = data
-            callback body
-      else if response.statusCode is 302
-        request(method, path, body, callback)
-      else
-        console.log "#{response.statusCode}: #{path}"
-        response.setEncoding('utf8')
-        response.on 'data', (chunk) ->
-          console.log chunk.toString()
-        process.exit(1)
-  req.write(body) if method is 'POST' and body
-  req.end()
-
-handlers = []
-
-dispatch = (message) ->
-  for pair in handlers
-    [ pattern, handler ] = pair
-    if message.userId isnt userId and match = message.body.match(pattern)
-      message.match = match
-      message.say = (thing, callback) -> say(message.room, thing, callback)
-      handler(message)
-
-xmppDispatch = (message) ->
-  for pair in handlers
-    [ pattern, handler ] = pair
-    if match = message.body.match(pattern)
-      message.match = match
-      message.say = (thing, callback) ->
-        message.children[0].children[0] = thing
-        message.client.send message
-        callback?()
-
-      handler(message)
-
-listen = (message) ->
-  if message.type is 'TextMessage'
-    dispatch(message)
-    log message
-
 # Hecticbot's heart
-campfire.room roomId, (room) ->
-  room.join()
-  console.log "Joined #{room.name}"
-  room.listen (message) ->
-    message.room = room
-    listen(message)
-
-  process.on 'SIGINT', ->
-    room.leave ->
-      console.log "\nI'll be back"
-      process.exit()
 
 http.createServer (req, res) ->
   res.writeHead 200, 'Content-Type': 'text/plain'
   res.end "Bow down to hecticbot"
 .listen process.env.PORT || 3000
-
-# Hecticbot's actions
-
-get = (path, body, callback) ->
-  request('GET', path, body, callback)
-
-say = (room, message, callback) ->
-  room.speak(message, callback)
-
-hear = (pattern, callback) ->
-  handlers.push [pattern, callback]
-
-descriptions = {}
-desc = (phrase, functionality) ->
-  descriptions[phrase] = functionality
-
-log = (message) ->
-  console.log "#{message.room.name} >> #{message.body}"
 
 # Hecticbot's personality (stolen from evilbot)
 

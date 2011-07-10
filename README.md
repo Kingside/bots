@@ -6,6 +6,7 @@ An experiment in building a 'bot framework that can be extended using plugins.
 ## Features
 
 * Simple core
+* DSL for defining bot personality
 * Multi-interface
   * XMPP
   * Campfire
@@ -24,5 +25,9 @@ An experiment in building a 'bot framework that can be extended using plugins.
     git clone https://github.com/hecticjeff/hecticbot
     cd hecticbot
     npm install
+
+## Documentation
+
+[man hecticbot](http://hecticjeff.github.com/hecticbot)
 
 Copyright (c) 2011 Chris Mytton
