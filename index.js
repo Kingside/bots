@@ -1,2 +1,2 @@
 require('coffee-script');
-module.exports = require('./bots');
+module.exports = require('./src/bots');
