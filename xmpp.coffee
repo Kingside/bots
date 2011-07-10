@@ -2,15 +2,17 @@
 {puts}         = require 'util'
 xmpp           = require 'node-xmpp'
 
-class XMPP extends EventEmitter
-  constructor: (jid, password) ->
-    puts "XMPP connecting as #{jid}"
+module.exports = class XMPP extends EventEmitter
+  constructor: (@jid, @password) ->
+
+  listen: ->
+    puts "XMPP connecting as #{@jid}"
     @client = new xmpp.Client
-      jid: jid
-      password: password
+      jid: @jid
+      password: @password
 
     @client.on 'online', @updatePresence
-    @client.on 'stanza', @processStanza
+    @client.on 'stanza', @handle
     @client.on 'error', (err) -> console.warn(err)
 
   updatePresence: =>
@@ -18,10 +20,16 @@ class XMPP extends EventEmitter
     @client.send new xmpp.Element('presence', {}).c('show').t('chat').up()
       .c('status').t('Happily echoing your <message /> stanzas')
 
-  processStanza: (stanza) =>
-    if stanza.is('message') and stanza.attrs.type isnt 'error'
-      stanza.body = stanza.children[0].children[0]
-      stanza.client = @client
-      @emit 'message', stanza
+  handle: (stanza) =>
+    # Send the response back to where it came from
+    stanza.attrs.to = stanza.attrs.from
+    delete stanza.attrs.from
 
-exports.createClient = (u, p) -> new XMPP(u, p)
+    if stanza.is('message') and stanza.attrs.type isnt 'error'
+      message =
+        body: stanza.children[0].children[0]
+        say: (thing, callback) =>
+          stanza.children[0].children[0] = thing
+          @client.send stanza
+          callback?()
+      @emit 'message', message if message.body

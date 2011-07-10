@@ -1,7 +1,7 @@
 {EventEmitter} = require 'events'
 
 module.exports = class Cli extends EventEmitter
-  constructor: ->
+  listen: ->
     process.stdin.resume()
     process.stdin.setEncoding 'utf8'
 

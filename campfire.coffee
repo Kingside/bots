@@ -1,12 +1,7 @@
+{EventEmitter} = require 'events'
 ranger = require 'ranger'
-Interface = require './interface'
 
-roomId = parseInt process.env.CAMPFIRE_ROOM
-userId = parseInt process.env.CAMPFIRE_USER
-account = process.env.CAMPFIRE_ACCOUNT
-apiKey = process.env.CAMPFIRE_API_KEY
-
-module.exports = class Campfire extends Interface
+module.exports = class Campfire extends EventEmitter
   constructor: (account, apiKey) ->
     @client = ranger.createClient(account, apiKey)
     @joinRoom()

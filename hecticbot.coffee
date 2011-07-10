@@ -3,30 +3,20 @@
 # 'bot actions.
 http = require 'http'
 {exec} = require 'child_process'
-
-# Configuration
-ua = "Hecticbot 0.0.1"
+bots = require './bots'
 
 jid = process.env.HECTICBOT_JID
 jidPassword = process.env.HECTICBOT_PASSWORD
+roomId = parseInt process.env.CAMPFIRE_ROOM
+userId = parseInt process.env.CAMPFIRE_USER
+account = process.env.CAMPFIRE_ACCOUNT
+apiKey = process.env.CAMPFIRE_API_KEY
 
-# Interfaces
-chat = require './xmpp'
-campfire = require './campfire'
+hecticbot = bots.createBot("Hecticbot 0.0.1")
+hecticbot.use bots.xmpp(jid, jidPassword)
 
-client = chat.createClient jid, jidPassword
-
-client.on 'message', (stanza) ->
-  stanza.attrs.to = stanza.attrs.from
-  delete stanza.attrs.from
-  xmppDispatch(stanza) if stanza.body
-
-# Hecticbot's heart
-
-http.createServer (req, res) ->
-  res.writeHead 200, 'Content-Type': 'text/plain'
-  res.end "Bow down to hecticbot"
-.listen process.env.PORT || 3000
+hear = hecticbot.hear
+desc = hecticbot.desc
 
 # Hecticbot's personality (stolen from evilbot)
 
@@ -45,15 +35,6 @@ hear /reload/, (message) ->
       throw err if err
       console.log stdout
       process.exit(1)
-
-hear /help/, (message) ->
-  message.say "I listen for the following…", ->
-    for phrase, functionality of descriptions
-      if functionality
-        output =  phrase + ": " + functionality
-      else
-        output = phrase
-      message.say output
 
 desc 'adventure me'
 hear /adventure me/, (message) ->
@@ -82,7 +63,7 @@ desc 'commit'
 hear /commit/, (message) ->
   url = "http://whatthecommit.com/index.txt"
 
-  get url, (body) ->
+  @get url, (body) ->
     message.say body
 
 desc 'hecticjeff'
@@ -93,14 +74,14 @@ desc 'fortune'
 hear /fortune/, (message) ->
   url = "http://www.fortunefortoday.com/getfortuneonly.php"
 
-  get url, (body) ->
+  @get url, (body) ->
     message.say body
 
 desc 'chuck'
 hear /chuck/i, (message) ->
   url = "http://api.icndb.com/jokes/random"
 
-  get url, (body) ->
+  @get url, (body) ->
     message.say body['value']['joke']
 
 desc 'weather in PLACE'
@@ -108,7 +89,7 @@ hear /weather in (.+)/i, (message) ->
   place = message.match[1]
   url   = "http://www.google.com/ig/api?weather=#{escape place}"
 
-  get url, (body) ->
+  @get url, (body) ->
     try
       if match = body.match(/<current_conditions>(.+?)<\/current_conditions>/)
         icon = match[1].match(/<icon data="(.+?)"/)
@@ -122,7 +103,7 @@ hear /wiki me (.*)/i, (message) ->
   term = escape(message.match[1])
   url  = "http://en.wikipedia.org/w/api.php?action=opensearch&search=#{term}&format=json"
 
-  get url, (body) ->
+  @get url, (body) ->
     try
       if body[1][0]
         message.say "http://en.wikipedia.org/wiki/#{escape body[1][0]}"
@@ -136,7 +117,7 @@ hear /image me (.*)/i, (message) ->
   phrase = escape(message.match[1])
   url = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&safe=active&q=#{phrase}"
 
-  get url, (body) ->
+  @get url, (body) ->
     try
       images = body.responseData.results
       image  = images[ Math.floor(Math.random()*images.length) ]
@@ -151,3 +132,11 @@ hear /(the rules|the laws)/i, (message) ->
 
 hear /(respond|answer me|bij)/i, (message) ->
   message.say "Chill, Winston."
+
+# Hecticbot's heart
+http.createServer (req, res) ->
+  res.writeHead 200, 'Content-Type': 'text/plain'
+  res.end "Bow down to hecticbot"
+.listen process.env.PORT || 3000
+
+hecticbot.start()
