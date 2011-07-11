@@ -1,1 +1,1 @@
-web: coffee hecticbot.coffee
+robot: coffee src/hecticbot.coffee
