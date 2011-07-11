@@ -1,1 +1,1 @@
-robot: coffee src/hecticbot.coffee
+robot: node_modules/.bin/coffee src/hecticbot.coffee
