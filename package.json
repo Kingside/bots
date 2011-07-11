@@ -15,5 +15,7 @@
     "node-xmpp": "",
     "ranger": ""
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodeunit": ""
+  }
 }
