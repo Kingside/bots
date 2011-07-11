@@ -21,15 +21,18 @@ module.exports = class XMPP extends EventEmitter
       .c('status').t('Happily echoing your <message /> stanzas')
 
   handle: (stanza) =>
-    # Send the response back to where it came from
-    stanza.attrs.to = stanza.attrs.from
-    delete stanza.attrs.from
-
     if stanza.is('message') and stanza.attrs.type isnt 'error'
       message =
-        body: stanza.children[0].children[0]
         say: (thing, callback) =>
-          stanza.children[0].children[0] = thing
-          @client.send stanza
+          @client.send @createReply(stanza.attrs.from, thing)
           callback?()
+
+      for child in stanza.children
+        message.body = child.children.join('\n') if child.name is 'body'
+
       @emit 'message', message if message.body
+
+  createReply: (to, text) ->
+    new xmpp.Element('message', to: to, type: 'chat')
+      .c('body').t(text)
+

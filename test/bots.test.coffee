@@ -7,7 +7,9 @@ module.exports = testCase
     testbot.reset next
 
   'test making robots': (test) ->
+    test.expect 12
     test.equal 0, testbot.handlers.length
+    test.equal 0, Object.keys(testbot.descriptions).length
 
     testbot.desc 'testing', 'no-op for testing'
     test.equal 1, Object.keys(testbot.descriptions).length
@@ -26,4 +28,9 @@ module.exports = testCase
       test.equal 2, handler.length
       test.ok handler[0].exec
 
+    test.done()
+
+  'test adding interfaces': (test) ->
+    testbot.use bots.cli()
+    test.equal 1, testbot.interfaces.length
     test.done()
