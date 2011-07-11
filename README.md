@@ -49,7 +49,7 @@ typing **ping**, coolbot should respond with pong.
 var bots = require('bots');
 var coolbot = bots.createBot('coolbot 0.0.1');
 coolbot.use(bots.cli());
-coolbot.desc('ping', 'Test I'm working with a ping');
+coolbot.desc('ping', "Test I'm working with a ping");
 coolbot.hear(/ping/, function(message) {
   message.say("PONG");
 });
