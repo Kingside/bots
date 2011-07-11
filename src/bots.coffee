@@ -1,37 +1,83 @@
-# The main `Robot` class is used for creating robots. You can define
+# The main `Bot` class is used for creating robots. You can define
 # behaviour through the simple dsl that is provided.
+#
+# ## tldr;
+#
+#     var bots = require('bots');
+#     var hecticbot = bots.createBot('hecticbot 0.0.1');
+#     hecticbot.use(bots.cli());
+#     hecticbot.desc('ping', 'Test I'm working with a ping');
+#     hecticbot.hear(/ping/, function(message) {
+#       message.say("PONG");
+#     });
+#     hecticbot.start();
+#
 {EventEmitter} = require 'events'
 http = require 'http'
 
+# Factory method for creating a new `Bot` instance. Accepts a name
+# argument, which is the name given to the bot.
 exports.createBot = (name) ->
   new Bot name
 
+# The `Bot` class, inherits from `EventEmitter`
 exports.Bot = class Bot extends EventEmitter
+
+  # Creates a new `Bot` with the given name. Sets up the bot ready to be
+  # configured.
   constructor: (@name) ->
     @handlers = []
     @interfaces = []
     @descriptions = {}
+
+  # Adds a description of a piece of the robots functionality, this is used
+  # for the robots builtin `help` phrase.
+  #
+  # `phrase` - The String representing the phase the bot recognises.
+  # `functionality` - The String describing the result of the phrase.
+  #
+  #     bot.desc('image me THING', 'Get a random image of THING');
+  desc: (phrase, functionality) =>
+    @descriptions[phrase] = functionality
+
+  # Add a `pattern` to the robots repotoire. This is matched against incoming
+  # messages and if they match then the message is passed to `callback`.
+  #
+  # `pattern` - The RegEx to match against the message body.
+  # `callback` - The Function to be invoked when the pattern is matched.
+  #
+  #     bot.hear(/ping/, function(message) {
+  #       message.say('PONG');
+  #     });
+  hear: (pattern, callback) =>
+    @handlers.push [pattern, callback]
+
+  # Add an interface to the robot. This is allows the 'bot to communicate
+  # with the outside world. See the `Cli` and `XMPP` interfaces for examples,
+  # the interface should inherit from EventEmitter, and emit a `message`
+  # event when there is a new message on the interface.
+  use: (interface) ->
+    @interfaces.push interface
+    interface.on 'message', @dispatch
+
+  # Dispatches an incoming message to any handlers that match the message
+  # body.
+  dispatch: (message) =>
+    for pair in @handlers
+      [ pattern, handler ] = pair
+      handler.call(@, message) if message.match = message.body.match(pattern)
+
+  # Start the bot up, calls listen on the registered interfaces.
+  start: ->
+    @hear /help/, @help
+    @interfaces.forEach (i) -> i.listen()
+    @emit 'start'
 
   get: (path, body, callback) ->
     @request('GET', path, body, callback)
 
   post: (path, body, callback) ->
     @request('POST', path, body, callback)
-
-  desc: (phrase, functionality) =>
-    @descriptions[phrase] = functionality
-
-  hear: (pattern, callback) =>
-    @handlers.push [pattern, callback]
-
-  dispatch: (message) =>
-    for pair in @handlers
-      [ pattern, handler ] = pair
-      handler.call(@, message) if message.match = message.body.match(pattern)
-
-  use: (interface) ->
-    @interfaces.push interface
-    interface.on 'message', @dispatch
 
   help: (message) ->
     message.say "I listen for the following…", =>
@@ -41,13 +87,6 @@ exports.Bot = class Bot extends EventEmitter
         else
           output = phrase
         message.say output
-
-  start: ->
-    @hear /help/, @help
-    @interfaces.forEach (i) -> i.listen()
-
-  configure: (callback) ->
-    callback @hear
 
   request: (method, path, body, callback) ->
     if match = path.match(/^(https?):\/\/([^\/]+?)(\/.+)/)
