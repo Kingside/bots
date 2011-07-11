@@ -96,6 +96,13 @@ exports.Bot = class Bot extends EventEmitter
     @interfaces.forEach (i) -> i.listen()
     @emit 'start'
 
+  # Reset the bot's `handlers` and `descriptions`, note this does not stop
+  # the registered interfaces from listening.
+  reset: (callback) ->
+    @handlers = []
+    @descriptions = []
+    callback?()
+
   # Helper method for making a `GET` request, proxies to the `request`
   # method.
   get: (path, body, callback) ->
