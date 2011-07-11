@@ -1,17 +1,5 @@
-# The main `Bot` class is used for creating robots. You can define
-# behaviour through the simple dsl that is provided.
-#
-# ## tldr;
-#
-#     var bots = require('bots');
-#     var hecticbot = bots.createBot('hecticbot 0.0.1');
-#     hecticbot.use(bots.cli());
-#     hecticbot.desc('ping', 'Test I'm working with a ping');
-#     hecticbot.hear(/ping/, function(message) {
-#       message.say("PONG");
-#     });
-#     hecticbot.start();
-#
+# The main `Bot` class that all robots are created from, this contains the
+# main functions for assembling a bot.
 {EventEmitter} = require 'events'
 http = require 'http'
 
