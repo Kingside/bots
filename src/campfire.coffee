@@ -14,8 +14,8 @@ module.exports = class Campfire extends EventEmitter
     console.log "Joined #{room.name}"
     @room.listen @handle
 
-    process.on 'SIGINT', ->
-      @room.leave
+  close: (done) ->
+    @room.leave done
 
   log: (message) ->
     console.log "#{@room.name} >> #{message.body}"

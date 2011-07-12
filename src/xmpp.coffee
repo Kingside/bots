@@ -15,6 +15,10 @@ module.exports = class XMPP extends EventEmitter
     @client.on 'stanza', @handle
     @client.on 'error', (err) -> console.warn(err)
 
+  close: (done) ->
+    @client.end()
+    done()
+
   updatePresence: =>
     puts "XMPP Connected"
     @client.send new xmpp.Element('presence', {}).c('show').t('chat').up()
