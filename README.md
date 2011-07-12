@@ -4,28 +4,11 @@ bots
 Make your own robot that knows how to speak many protocols, and can be
 taught more.
 
-## Features
-
-* Simple core
-* DSL for defining bot personality
-* Multi-interface
-  * XMPP
-  * Campfire
-  * Command line
-* Hooks system for extending
-  * Startup
-  * New event
-  * Before processing
-  * After processing
-  * Shutdown
-* Redis for short term memory
-* MongoDB for long term memory
-
 ## Installing
 
-    git clone https://github.com/hecticjeff/bots
-    cd bots
-    npm install
+    npm install bots
+
+## Tutorial
 
 So, you want to build your own 'bot. You've heard that all the cool hip
 startups have their own office 'bot, you know, the one that monitors the
@@ -47,12 +30,16 @@ typing **ping**, coolbot should respond with pong.
 
 ``` javascript
 var bots = require('bots');
+
 var coolbot = bots.createBot('coolbot 0.0.1');
+
 coolbot.use(bots.cli());
+
 coolbot.desc('ping', "Test I'm working with a ping");
 coolbot.hear(/ping/, function(message) {
   message.say("PONG");
 });
+
 coolbot.start();
 ```
 
