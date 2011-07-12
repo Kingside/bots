@@ -1,4 +1,4 @@
-bots = require '..'
+bots = require '../src'
 testbot = bots.createBot 'testbot'
 {testCase} = require 'nodeunit'
 
