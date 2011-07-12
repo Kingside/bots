@@ -1,7 +1,13 @@
 {
   "author": "Chris Mytton <self@hecticjeff.net> (http://hecticjeff.net)",
   "name": "bots",
-  "description": "a simple framework for building cross-network bots",
+  "description": "Build robust networks of bots that can react to events",
+  "keywords": [
+    "xmpp",
+    "bot",
+    "campfire"
+  ],
+  "homepage": "https://github.com/hecticjeff/bots",
   "version": "0.0.1",
   "repository": {
     "type": "git",
