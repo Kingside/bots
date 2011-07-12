@@ -13,6 +13,7 @@
     "type": "git",
     "url": "git://github.com/hecticjeff/bots.git"
   },
+  "main": "./lib",
   "engines": {
     "node": "0.4"
   },
