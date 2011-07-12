@@ -177,16 +177,16 @@ exports.Bot = class Bot extends EventEmitter
     req.end()
 
 # Command line interface.
-Cli = require './cli'
+Cli = require './interfaces/cli'
 exports.cli = ->
   new Cli
 
 # Campfire interface.
-Campfire = require './campfire'
+Campfire = require './interfaces/campfire'
 exports.campfire = (args...) ->
   new Campfire args...
 
 # XMPP interface.
-Xmpp = require './xmpp'
+Xmpp = require './interfaces/xmpp'
 exports.xmpp = (args...) ->
   new Xmpp args...
