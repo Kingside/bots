@@ -25,6 +25,8 @@
     "nodeunit": "0.5.1"
   },
   "scripts": {
-    "test": "nodeunit test/*.test.coffee"
+    "test": "nodeunit test/*.test.coffee",
+    "prepublish": "coffee -co lib src",
+    "clean": "rm -rf lib"
   }
 }
