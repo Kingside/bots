@@ -60,4 +60,9 @@ This example uses the `cli` interface, this can be useful for testing, and
 the bot can take commands on stdin, so can be used in a pipe, but for other
 services you'll need to `use` different interfaces.
 
+## Credits
+
+Parts of the dsl design is inspired by
+[evilbot](https://github.com/defunkt/evilbot) by @defunkt.
+
 Copyright (c) 2011 Chris Mytton
