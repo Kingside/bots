@@ -47,6 +47,15 @@ This example uses the `cli` interface, this can be useful for testing, and
 the bot can take commands on stdin, so can be used in a pipe, but for other
 services you'll need to `use` different interfaces.
 
+## Contributing
+
+Get the code and run the tests.
+
+    git clone https://github.com/hecticjeff/bots
+    cd bots
+    npm install
+    npm test
+
 ## Credits
 
 Parts of the dsl design is inspired by
