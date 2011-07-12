@@ -23,8 +23,8 @@ taught more.
 
 ## Installing
 
-    git clone https://github.com/hecticjeff/hecticbot
-    cd hecticbot
+    git clone https://github.com/hecticjeff/bots
+    cd bots
     npm install
 
 So, you want to build your own 'bot. You've heard that all the cool hip
@@ -59,9 +59,5 @@ coolbot.start();
 This example uses the `cli` interface, this can be useful for testing, and
 the bot can take commands on stdin, so can be used in a pipe, but for other
 services you'll need to `use` different interfaces.
-
-## Documentation
-
-[man hecticbot](http://hecticjeff.github.com/hecticbot)
 
 Copyright (c) 2011 Chris Mytton
