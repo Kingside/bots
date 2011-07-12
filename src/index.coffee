@@ -173,8 +173,8 @@ exports.Bot = class Bot extends EventEmitter
           response.on 'data', (chunk) ->
             console.log chunk.toString()
           process.exit(1)
-    req.write(body) if method is 'POST' and body
-    req.end()
+      req.write(body) if method is 'POST' and body
+      req.end()
 
 # Command line interface.
 Cli = require './interfaces/cli'
