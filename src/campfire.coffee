@@ -2,31 +2,26 @@
 ranger = require 'ranger'
 
 module.exports = class Campfire extends EventEmitter
-  constructor: (account, apiKey) ->
-    @client = ranger.createClient(account, apiKey)
-    @joinRoom()
+  constructor: (@options = {}) ->
+    @client = ranger.createClient(@options.account, @options.apiKey)
 
-  joinRoom: ->
-    @client.room roomId, (@room) ->
-      @room.join()
-      console.log "Joined #{room.name}"
-      @room.listen (message) ->
-        message.room = @room
-        @handle(message)
+  listen: ->
+    @client.room @options.roomId, @joinRoom
 
-      process.on 'SIGINT', ->
-        @room.leave ->
-          console.log "\nI'll be back"
-          process.exit()
+  joinRoom: (room) =>
+    @room = room
+    @room.join()
+    console.log "Joined #{room.name}"
+    @room.listen @handle
+
+    process.on 'SIGINT', ->
+      @room.leave
 
   log: (message) ->
-    console.log "#{message.room.name} >> #{message.body}"
+    console.log "#{@room.name} >> #{message.body}"
 
-  say: (message, callback) ->
-    @room.speak message, callback
-
-  handle: (message) ->
-    if message.type is 'TextMessage' and message.userId isnt userId
-      message.say = (thing, callback) -> @say(message.room, thing, callback)
+  handle: (message) =>
+    if message.type is 'TextMessage' and message.userId isnt @options.userId
       @log message
+      message.say = (text, callback) => @room.speak text, callback
       @emit 'message', message
