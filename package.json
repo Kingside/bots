@@ -3,8 +3,8 @@
   "name": "bots",
   "description": "Build robust networks of bots that can react to events",
   "keywords": [
-    "xmpp",
     "bot",
+    "xmpp",
     "campfire"
   ],
   "homepage": "https://github.com/hecticjeff/bots",
