@@ -52,3 +52,9 @@ module.exports = testCase
 
     robot.dispatch body: 'not this one'
     robot.dispatch body: 'where is wally'
+
+  'test bot start event': (test) ->
+    robot.on 'start', ->
+      test.done()
+
+    robot.start()
