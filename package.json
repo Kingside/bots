@@ -15,6 +15,7 @@
   },
   "main": "./lib",
   "bin": "./bin/bots",
+  "man": "./man/bots.1",
   "engines": {
     "node": "0.4"
   },
@@ -25,10 +26,12 @@
   },
   "devDependencies": {
     "coffee-script": "1.1",
-    "nodeunit": "0.5.1"
+    "nodeunit": "0.5.1",
+    "ronn": ""
   },
   "scripts": {
     "test": "cake test",
-    "prepublish": "cake build"
+    "doc": "ronn -r < doc/bots.md > man/bots.1",
+    "prepublish": "cake build && npm run-script doc"
   }
 }
