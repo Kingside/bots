@@ -3,6 +3,10 @@
 {EventEmitter} = require 'events'
 request = require 'request'
 http = require 'http'
+fs = require 'fs'
+
+# Get the current version from `package.json`.
+exports.version = JSON.parse(fs.readFileSync(__dirname + "/../package.json")).version
 
 # Factory method for creating a new `Bot` instance. Accepts a name
 # argument, which is the name given to the bot.
