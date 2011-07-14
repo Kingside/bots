@@ -1,6 +1,10 @@
 fs = require 'fs'
 
 module.exports = (name, version) ->
+  unless name
+    console.log "Usage: bots NAME"
+    process.exit -1
+
   console.log "Generating #{name}"
   fs.mkdir name, '0755', (err) ->
     throw err if err
