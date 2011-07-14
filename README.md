@@ -25,22 +25,40 @@ with [node(1)](http://nodejs.org/) and it's de-facto package manager,
     npm install bots
 
 Now you'll need to give the robot some personality, try putting the following
-in a file called `coolbot.js` and running it with `node coolbot.js`, then try
-typing **ping**, coolbot should respond with pong.
+in a file called `coolbot.js`.
 
 ``` javascript
+// Pull in the bots framework.
 var bots = require('bots');
 
+// Create your own cool bot and give it a name.
 var coolbot = bots.createBot('coolbot 0.0.1');
 
+// Tell this cool bot to use the CLI interface (stdin/stdout).
 coolbot.use(bots.cli());
 
+// Add a description and it will appear when the bot hears "help".
 coolbot.desc('ping', "Test I'm working with a ping");
+
+// Assign an action to the bot, first argument is the regex to match,
+// second is the callback to be invoked when this message is matched.
 coolbot.hear(/ping/, function(message) {
+
+  // Respond to the person who sent the message, note that you don't
+  // *have* to call `message.say`.
   message.say("PONG");
 });
 
+// Start you cool bot listening on the interfaces you have assigned.
 coolbot.start();
+```
+
+Now try running it:
+
+```
+$ node coolbot.js
+ping
+PONG
 ```
 
 This example uses the `cli` interface, this can be useful for testing, and
