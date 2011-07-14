@@ -1,29 +1,29 @@
 bots = require '../src'
-testbot = bots.createBot 'testbot'
+robot = bots.createBot 'robot'
 {testCase} = require 'nodeunit'
 
 module.exports = testCase
   setUp: (next) ->
-    testbot.reset next
+    robot.reset next
 
   'test making robots': (test) ->
     test.expect 12
-    test.equal 0, testbot.handlers.length
-    test.equal 0, Object.keys(testbot.descriptions).length
+    test.equal 0, robot.handlers.length
+    test.equal 0, Object.keys(robot.descriptions).length
 
-    testbot.desc 'testing', 'no-op for testing'
-    test.equal 1, Object.keys(testbot.descriptions).length
+    robot.desc 'testing', 'no-op for testing'
+    test.equal 1, Object.keys(robot.descriptions).length
 
-    testbot.hear /testing/, ->
-    test.equal 1, testbot.handlers.length
+    robot.hear /testing/, ->
+    test.equal 1, robot.handlers.length
 
-    testbot.desc 'hello', 'a friendly hello'
-    test.equal 2, Object.keys(testbot.descriptions).length
+    robot.desc 'hello', 'a friendly hello'
+    test.equal 2, Object.keys(robot.descriptions).length
 
-    testbot.hear /hello/, (msg) -> msg.say('hello!')
-    test.equal 2, testbot.handlers.length
+    robot.hear /hello/, (msg) -> msg.say('hello!')
+    test.equal 2, robot.handlers.length
 
-    for handler in testbot.handlers
+    for handler in robot.handlers
       test.ok Array.isArray(handler)
       test.equal 2, handler.length
       test.ok handler[0].exec
@@ -31,6 +31,24 @@ module.exports = testCase
     test.done()
 
   'test adding interfaces': (test) ->
-    testbot.use bots.cli()
-    test.equal 1, testbot.interfaces.length
+    robot.use bots.cli()
+    test.equal 1, robot.interfaces.length
     test.done()
+
+  'test dispatching simple commands': (test) ->
+    test.expect(1)
+    robot.interfaces = []
+    robot.hear /hello/, (msg) ->
+      test.equal 'hello', msg.match[0]
+      test.done()
+
+    robot.dispatch body: 'hello there'
+
+  'test dispatching commands with matches': (test) ->
+    robot.hear /where is (.+)/, (msg) ->
+      test.ok msg.body.match(/where is/)
+      test.equal 'wally', msg.match[1]
+      test.done()
+
+    robot.dispatch body: 'not this one'
+    robot.dispatch body: 'where is wally'
