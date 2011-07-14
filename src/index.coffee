@@ -176,3 +176,5 @@ exports.campfire = (args...) ->
 Xmpp = require './interfaces/xmpp'
 exports.xmpp = (args...) ->
   new Xmpp args...
+
+exports.generate = require './generator'

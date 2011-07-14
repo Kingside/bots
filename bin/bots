@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+var bots = require('..');
+
+bots.generate(process.argv[2], bots.version);
