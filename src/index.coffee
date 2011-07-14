@@ -92,15 +92,15 @@ exports.Bot = class Bot extends EventEmitter
   #     coolbot.start();
   #
   start: ->
-    i.listen() for i in @interfaces
+    interface.listen() for interface in @interfaces
     @hear /help/, @help
     @emit 'start'
 
   stop: (finished) ->
     console.log "\nStopping #{@name}"
     closing = @interfaces.length
-    for i in @interfaces
-      i.close ->
+    for interface in @interfaces
+      interface.close ->
         finished() if --closing is 0
 
   # Reset the bot's `handlers` and `descriptions`, note this does not stop
