@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "node-xmpp": "0.2.9",
-    "ranger": "0.2.4"
+    "ranger": "0.2.4",
+    "request": "1.9.8"
   },
   "devDependencies": {
     "coffee-script": "1.1",

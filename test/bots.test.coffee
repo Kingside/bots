@@ -58,3 +58,8 @@ module.exports = testCase
       test.done()
 
     robot.start()
+
+  'test making requests': (test) ->
+    robot.get 'http://hecticjeff.net/', (body) ->
+      test.ok body.match(/hecticjeff/i)
+      test.done()

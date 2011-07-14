@@ -1,6 +1,7 @@
 # The main `Bot` class that all robots are created from, this contains the
 # main functions for assembling a bot.
 {EventEmitter} = require 'events'
+request = require 'request'
 http = require 'http'
 
 # Factory method for creating a new `Bot` instance. Accepts a name
@@ -112,13 +113,13 @@ exports.Bot = class Bot extends EventEmitter
 
   # Helper method for making a `GET` request, proxies to the `request`
   # method.
-  get: (path, body, callback) ->
-    @request('GET', path, body, callback)
+  get: (uri, body, callback) ->
+    @request('GET', uri, body, callback)
 
   # Helper method for making a `POST` request, proxies to the `request`
   # method.
-  post: (path, body, callback) ->
-    @request('POST', path, body, callback)
+  post: (uri, body, callback) ->
+    @request('POST', uri, body, callback)
 
   # Handler for the default help action, gathers all of the registered
   # descriptions and sends a message describing each action.
@@ -135,46 +136,27 @@ exports.Bot = class Bot extends EventEmitter
 
   # Helper to make http requests, tries to automatically handle JSON input and
   # output.
-  request: (method, path, body, callback) ->
-    if match = path.match(/^(https?):\/\/([^\/]+?)(\/.*)/)
-      headers = { Host: match[2], 'Content-Type': 'application/json', 'User-Agent': @name }
-      port = if match[1] == 'https' then 443 else 80
-      client = http.createClient(port, match[2], port == 443)
-      path = match[3]
+  request: (method, uri, body, callback) ->
+    options = { method: method, uri: uri }
 
-      if typeof(body) is 'function' and not callback
-        callback = body
-        body = null
+    options.headers = { 'User-Agent': @name }
 
-      if method is 'POST' and body
-        body = JSON.stringify body if typeof body isnt 'string'
-        headers['Content-Length'] = body.length
+    if typeof(body) is 'function' and not callback
+      callback = body
+      body = null
 
-      req = client.request(method, path, headers)
+    if typeof body is 'string'
+      options.body = body
+    else
+      options.json = body
 
-      req.on 'response', (response) ->
-        if response.statusCode is 200
-          data = ''
-          response.setEncoding('utf8')
-          response.on 'data', (chunk) ->
-            data += chunk
-          response.on 'end', ->
-            if callback
-              try
-                body = JSON.parse(data)
-              catch e
-                body = data
-              callback body
-        else if response.statusCode is 302
-          request(method, path, body, callback)
-        else
-          console.log "#{response.statusCode}: #{path}"
-          response.setEncoding('utf8')
-          response.on 'data', (chunk) ->
-            console.log chunk.toString()
-          process.exit(1)
-      req.write(body) if method is 'POST' and body
-      req.end()
+    request options, (err, response, body) ->
+      try
+        body = JSON.parse body
+      catch e
+        # Ignore and pass through the raw body.
+
+      callback? body, response
 
 # Command line interface.
 Cli = require './interfaces/cli'
