@@ -58,7 +58,7 @@ Get the code and run the tests.
 
 ## Credits
 
-Parts of the dsl design is inspired by
-[evilbot](https://github.com/defunkt/evilbot) by @defunkt.
+Parts of the dsl design were inspired by
+[defunkt/evilbot](https://github.com/defunkt/evilbot).
 
 Copyright (c) 2011 Chris Mytton
