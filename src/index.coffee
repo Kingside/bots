@@ -29,6 +29,9 @@ exports.Bot = class Bot extends EventEmitter
     @interfaces = []
     @descriptions = {}
 
+  setup: (@nickname, callback) ->
+    callback @desc, @hear
+
   # Adds a description of a piece of the robots functionality, this is used
   # for the robots builtin `help` phrase.
   #
@@ -84,6 +87,7 @@ exports.Bot = class Bot extends EventEmitter
   #
   dispatch: (message) =>
     for pair in @handlers
+      continue unless message.body.match(new RegExp("^#{@nickname}"))
       [ pattern, handler ] = pair
       handler.call(@, message) if message.match = message.body.match(pattern)
 
