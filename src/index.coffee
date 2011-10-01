@@ -87,7 +87,7 @@ exports.Bot = class Bot extends EventEmitter
   #
   dispatch: (message) =>
     for pair in @handlers
-      continue unless message.body.match(new RegExp("^#{@nickname}"))
+      continue unless @nickname? and message.body.match(new RegExp("^#{@nickname}"))
       [ pattern, handler ] = pair
       handler.call(@, message) if message.match = message.body.match(pattern)
 
