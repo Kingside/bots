@@ -2,7 +2,6 @@
 # main functions for assembling a bot.
 {EventEmitter} = require 'events'
 request = require 'request'
-http = require 'http'
 fs = require 'fs'
 
 # Get the current version from `package.json`.
