@@ -29,7 +29,12 @@ exports.Bot = class Bot extends EventEmitter
     @interfaces = []
     @descriptions = {}
 
-  setup: (@nickname, callback) ->
+  setup: (nickname, callback) ->
+    if typeof(nickname) is 'function'
+      callback = nickname
+    else
+      @nickname = nickname
+
     callback @desc, @hear
 
   # Adds a description of a piece of the robots functionality, this is used
