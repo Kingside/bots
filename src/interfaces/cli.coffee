@@ -2,10 +2,12 @@
 
 module.exports = class Cli extends EventEmitter
   listen: ->
-    process.stdin.resume()
-    process.stdin.setEncoding 'utf8'
-
-    process.stdin.on 'data', @handle
+    if command = process.argv.slice(2).join(' ')
+      @handle command
+    else
+      process.stdin.resume()
+      process.stdin.setEncoding 'utf8'
+      process.stdin.on 'data', @handle
 
   handle: (chunk) =>
     message =
