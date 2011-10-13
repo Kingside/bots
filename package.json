@@ -31,7 +31,6 @@
   },
   "scripts": {
     "test": "cake test",
-    "doc": "ronn -r < doc/bots.md > man/bots.1",
-    "prepublish": "cake build && npm run-script doc"
+    "doc": "ronn -r < doc/bots.md > man/bots.1"
   }
 }
