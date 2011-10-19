@@ -59,9 +59,9 @@ coolbot.start();
 Now try running it:
 
 ```
-$ node coolbot.js
-ping
+$ node coolbot.js ping
 PONG
+$
 ```
 
 This example uses the `cli` interface, this can be useful for testing, and
