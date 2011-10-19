@@ -6,7 +6,10 @@ taught more.
 
 ## Installing
 
-    npm install bots
+By installing globally you gain access to the `bots(1)` tool which can
+generate bots for you.
+
+    npm -g install bots
 
 ## Tutorial
 
