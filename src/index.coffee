@@ -1,6 +1,6 @@
 # The main `Bot` class that all robots are created from, this contains the
 # main functions for assembling a bot.
-{EventEmitter} = require 'events'
+broadway = require 'broadway'
 request = require 'request'
 fs = require 'fs'
 
@@ -19,11 +19,12 @@ exports.createBot = (name) ->
 
 # The `Bot` class, inherits from `EventEmitter` so it can notify plugins of
 # certain lifecycle events.
-exports.Bot = class Bot extends EventEmitter
+exports.Bot = class Bot extends broadway.App
 
   # Creates a new `Bot` with the given name. Sets up the bot ready to be
   # configured.
   constructor: (@name) ->
+    super
     @handlers = []
     @interfaces = []
     @descriptions = {}
@@ -64,19 +65,6 @@ exports.Bot = class Bot extends EventEmitter
   hear: (pattern, callback) =>
     @handlers.push [pattern, callback]
 
-  # Add an interface to the robot. This is allows the 'bot to communicate
-  # with the outside world. See the `Cli` and `XMPP` interfaces for examples,
-  # the interface should inherit from EventEmitter, and emit a `message`
-  # event when there is a new message on the interface.
-  #
-  #     var bots = require('bots');
-  #     var coolbot = bots.createBot('coolbot 1.0.0');
-  #     coolbot.use(bots.cli());
-  #
-  use: (interface) ->
-    @interfaces.push interface
-    interface.on 'message', @dispatch
-
   # Dispatches an incoming message to any handlers that match the message
   # body. This can be used to fake message to the bot, useful for testing
   # the bot. Takes a `message` object with `body` and `say` properties.
@@ -106,8 +94,8 @@ exports.Bot = class Bot extends EventEmitter
   #     coolbot.start();
   #
   start: ->
-    interface.listen() for interface in @interfaces
     @hear /help/, @help
+    @init()
     @emit 'start'
 
   stop: (finished) ->
@@ -171,10 +159,7 @@ exports.Bot = class Bot extends EventEmitter
 
       callback? body, response
 
-# Command line interface.
-exports.cli = ->
-  Cli = require './interfaces/cli'
-  new Cli
+exports.cli = require './interfaces/cli'
 
 # Campfire interface.
 exports.campfire = (args...) ->

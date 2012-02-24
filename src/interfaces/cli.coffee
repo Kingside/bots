@@ -1,7 +1,18 @@
 {EventEmitter} = require 'events'
 
-module.exports = class Cli extends EventEmitter
-  listen: ->
+exports.name = 'cli'
+
+# Attach the cli interface to the bot.
+exports.attach = ->
+  @cli = new Cli
+
+exports.init = ->
+  # When the bot emits a start event we need to begin listening.
+  @on 'start', @cli.listen
+  @on 'message', @cli.handle
+
+class Cli extends EventEmitter
+  listen: =>
     if command = process.argv.slice(2).join(' ')
       @handle command
     else
