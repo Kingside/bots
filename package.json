@@ -17,7 +17,7 @@
   "bin": "./bin/bots",
   "man": "./man/bots.1",
   "engines": {
-    "node": "0.4"
+    "node": ">= 0.4.0"
   },
   "dependencies": {
     "node-xmpp": "0.3.1",
