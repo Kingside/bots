@@ -20,14 +20,14 @@
     "node": "0.4"
   },
   "dependencies": {
-    "node-xmpp": "~> 0.2.9",
-    "ranger": "~> 0.2.4",
-    "request": "~> 2.1.1"
+    "node-xmpp": "0.3.1",
+    "ranger": "0.1.0",
+    "request": "2.9.150"
   },
   "devDependencies": {
-    "coffee-script": "~> 1.1.2",
-    "nodeunit": "~> 0.5.1",
-    "ronn": ""
+    "coffee-script": "1.2.0",
+    "nodeunit": "0.7.3",
+    "ronn": "0.3.8"
   },
   "scripts": {
     "test": "cake test",
