@@ -8,7 +8,7 @@
     "campfire"
   ],
   "homepage": "https://github.com/hecticjeff/bots",
-  "version": "0.0.7pre",
+  "version": "0.0.7",
   "repository": {
     "type": "git",
     "url": "git://github.com/hecticjeff/bots.git"
